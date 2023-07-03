@@ -34,6 +34,7 @@ class _ExpensesState extends State<Expenses> {
 
   void _adOverlay() {
     showModalBottomSheet(
+        useSafeArea: true,
         isScrollControlled: true,
         context: context,
         builder: (ctx) => NewExpense(onAddExpense: _addExpense),
@@ -70,6 +71,7 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     Widget mainCont = const Center(
       child: Text("No expenses found, start addidng some!"),
     );
@@ -83,14 +85,21 @@ class _ExpensesState extends State<Expenses> {
       appBar: AppBar(
         title: const Text("Expenses Tracker App"),
       ),
-      body: Column(
-        children: [
-          Chart(expenses: _regExpenses),
-          Expanded(
-            child: mainCont,
-          ),
-        ],
-      ),
+      body: width < 600
+          ? Column(
+              children: [
+                Chart(expenses: _regExpenses),
+                Expanded(
+                  child: mainCont,
+                ),
+              ],
+            )
+          : Row(children: [
+              Expanded(child: Chart(expenses: _regExpenses)),
+              Expanded(
+                child: mainCont,
+              ),
+            ]),
       floatingActionButton: FloatingActionButton(
         mini: false,
         elevation: 10,
